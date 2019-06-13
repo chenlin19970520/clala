@@ -6,18 +6,35 @@ const serve = require("koa-static"); //koa 封装静态资源
 const promise = require("fs.promised");
 const compose = require("koa-compose"); //合并中间件
 const koaBody = require("koa-body"); //表单提交
-const monk = require("monk");
+const mongoose = require("mongoose");
 
 const app = new Koa();
 
 //使用monk--中间层，用来连接数据库。
-const mongodb = monk("www.chenyibai.cn/test");
+const mongodb = mongoose.connect("mongodb://chenlin:19970520@www.chenyibai.cn:27017/my", {
+  useNewUrlParser: true
+});
+
+var userSchema = new mongoose.Schema({
+  username: String,
+  password: String,
+  email: String
+});
+var user = mongoose.model("ts", userSchema);
+
+var u = {
+  username: "chenaln",
+  password: "12a3",
+  email: ""
+};
+var newUser = new user(u);
+newUser.save();
+
 //读取test库中的show集合
-const user = mongodb.get("show");
+// const user = mongodb.get("tt");
 
 const main = async ctx => {
-  console.log("a");
-  const data = await user.find();
+  const data = await user.find({}, { _id: 0 });
   ctx.response.body = data;
 };
 app.use(route.get("/", main));
