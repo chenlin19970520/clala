@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 
 const app = new Koa();
 
-//使用monk--中间层，用来连接数据库。
+//连接数据库。
 const mongodb = mongoose.connect("mongodb://chenlin:19970520@www.chenyibai.cn:27017/my", {
   useNewUrlParser: true
 });
@@ -28,7 +28,7 @@ var u = {
   email: ""
 };
 var newUser = new user(u);
-newUser.save();
+// newUser.save();
 
 //读取test库中的show集合
 // const user = mongodb.get("tt");
@@ -37,9 +37,13 @@ const main = async ctx => {
   const data = await user.find({}, { _id: 0 });
   ctx.response.body = data;
 };
-app.use(route.get("/", main));
+const index = async ctx=>{
+  ctx.response.type = "html";
+  ctx.response.body = fs.createReadStream("complate/index.html")
+}
+app.use(route.get("/",index));
 
-// 配置静态资源
+// 配置静态资源 
 app.use(serve(path.join(__dirname)));
 var server = app.listen(3000, () => {
   const host = server.address().address;
