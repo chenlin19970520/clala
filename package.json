@@ -10,7 +10,7 @@
     "koa-body": "^4.1.0",
     "koa-route": "^3.2.0",
     "koa-static": "^5.0.0",
-    "mongoose": "^5.5.15",
+    "mongoose": "^5.7.5",
     "nodemon": "^1.19.1"
   }
 }
